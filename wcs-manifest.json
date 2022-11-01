@@ -1,0 +1,55 @@
+{
+  "title": "Reactive table",
+  "description": "A simple HTML table that gets fed with custom data",
+  "descriptionAbstract": "The purpose of this webcomponent is to have an easy way to dynamically create a table by feeding data into it from the external DOM.",
+  "license": "AGPL-3.0-or-later",
+  "copyrightHolders": [
+    {
+      "name": "NOI",
+      "email": "info@noi.bz.it",
+      "organization": "NOI S.p.A",
+      "organizationUrl": "https://noi.bz.it"
+    }
+  ],
+  "authors": [
+    {
+      "name": "Giulio Roman",
+      "email": "giulio@roman.bz.it",
+      "organization": "roman.bz.it",
+      "organizationUrl": "https://www.roman.bz.it"
+    }
+  ],
+  "image": "wcs-logo.png",
+  "searchTags": [],
+  "dist": {
+    "basePath": "dist",
+    "files": [
+      "reactive-table.min.js"
+    ],
+    "scripts": [
+    ]
+  },
+  "configuration": {
+    "tagName": "reactive-table",
+    "options": [
+      {
+        "key": "data",
+        "type": "text",
+        "label": "a JSON encoded string representing an array of objects that will be translated to table rows",
+        "required": true,
+        "options": {
+          "default": "[]"
+        }
+      },
+      {
+        "key": "schema",
+        "type": "text",
+        "label": "a JSON encoded string representing an array of objects that define the schema of the input data",
+        "required": true,
+        "options": {
+          "default": "[]"
+        }
+      }
+    ]
+  }
+}

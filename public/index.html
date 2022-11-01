@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Reactive table</title>
+</head>
+<body>
+  <reactive-table
+    data='
+      [
+        {
+          "id": 1,
+          "name": "pippo",
+          "value": "Ambaraba Cici Coco"
+        },
+        [
+          {
+            "id": 2,
+            "name": "ciccio",
+            "value": "Tre Civette Sul Como"
+          },
+          {
+            "id": 3,
+            "name": "Che Facevano LAmore"
+          },
+          {
+            "id": 4,
+            "value": "Con La Figlia Del Dottore"
+          }
+        ],
+        {
+          "id": 5,
+          "name": "Il Dottore Si Ammalo"
+        },
+        {
+          "id": 6,
+          "value": "Ambaraba Cici Coco"
+        }
+      ]
+    '
+    schema='
+      [
+        {
+          "key": "id",
+          "name": "Identifier",
+          "type": "integer"
+        },
+        {
+          "key": "name",
+          "name": "Full Name",
+          "type": "string",
+          "default": "-"
+        },
+        {
+          "key": "value",
+          "name": "The Value",
+          "type": "string",
+          "default": "-"
+        }
+      ]
+    '
+  />
+  <script src="reactive-table.js"></script>
+</body>
+</html>
