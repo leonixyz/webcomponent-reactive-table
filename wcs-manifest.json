@@ -49,6 +49,15 @@
         "options": {
           "default": "[]"
         }
+      },
+      {
+        "key": "date-format",
+        "type": "text",
+        "label": "the output format for date objects using Moment.js tokens: https://momentjs.com/docs/#/displaying/format/",
+        "required": true,
+        "options": {
+          "default": ""
+        }
       }
     ]
   }

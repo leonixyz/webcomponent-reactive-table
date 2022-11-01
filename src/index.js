@@ -1,9 +1,15 @@
-import {LitElement, html, css} from 'lit';
+import moment from 'moment'
+import {LitElement, css} from 'lit'
+import {html, unsafeStatic} from 'lit/static-html.js'
+
 
 /**
 * A reactive table.
 */
 export class ReactiveTable extends LitElement {
+    /**
+     * Return the stylesheet of the webcomponent.
+     */
     static get styles() {
         return css`
         :host {
@@ -78,6 +84,9 @@ export class ReactiveTable extends LitElement {
         `;
     }
     
+    /**
+     * Lit webcomponent reactive properties
+     */
     static get properties() {
         return {
             /**
@@ -92,9 +101,21 @@ export class ReactiveTable extends LitElement {
             */
             schema: {type: String},
             
+            /**
+             * A custom format for dates.
+             * If not present, the output of Date.toLocaleString() is used instead for
+             * all values that are marked as dates.
+             */
+            dateFormat: {
+                type: String,
+                attribute: 'date-format'
+            }
         };
     }
     
+    /**
+     * Initialize the webcomponent
+     */
     constructor() {
         super();
         this.data = "[]";
@@ -104,6 +125,10 @@ export class ReactiveTable extends LitElement {
         this.hasHiddenRows = false
     }
     
+    /**
+     * Implement the Lit reactive lifecycle event hook.
+     * @param {object} changed 
+     */
     willUpdate(changed) {
         if (changed.has('data') && this.data) {
             this._data = JSON.parse(this.data);
@@ -113,7 +138,13 @@ export class ReactiveTable extends LitElement {
         }
     }
     
+    /**
+     * Return the full template of the webcomponent.
+     */
     render() {
+        // if any of the rows has sub-rows, then the whole table should take it into account
+        // and prepend every row with an empty small column;
+        // this column will hold the expansion toggling button for expandable rows
         this.hasHiddenRows = this._data.some((row) => Array.isArray(row))
         if (this.hasHiddenRows) {
             this.style.setProperty('--gridtemplate', `1rem repeat(${this._schema.length}, 1fr)`)
@@ -142,6 +173,9 @@ export class ReactiveTable extends LitElement {
         `;
     }
 
+    /**
+     * Return the headers of the table according to the schema that has been fed into it.
+     */
     _getHeaders() {
         let headers = html`
             ${this.hasHiddenRows ? html`<th></th>` : null}
@@ -150,6 +184,9 @@ export class ReactiveTable extends LitElement {
         return headers
     }
 
+    /**
+     * Return the rows of the table according to the data that has been fed into it.
+     */
     _getRows() {
         if (this._data.length === 0) {
             return html`
@@ -178,8 +215,10 @@ export class ReactiveTable extends LitElement {
                                         @click="${this._handleToggleExpandClick}"
                                     >
                                     </td>
-                                    ${this._schema.map((h) =>
-                                        html`<td class="${index !== 0 ? 'subrow hidden' : ''}">${subrow[h.key] ?? h.default}</td>`
+                                    ${this._schema.map((header) =>
+                                        html`<td class="${index !== 0 ? 'subrow hidden' : ''}">
+                                            ${this._getValue(subrow, header)}
+                                        </td>`
                                     )}
                                 `
                                 }
@@ -195,14 +234,44 @@ export class ReactiveTable extends LitElement {
                             this.hasHiddenRows ? html`<td></td>` : null
                         }
                         ${
-                            this._schema.map((h) =>
-                                html`<td>${row[h.key] ?? h.default}</td>`
+                            this._schema.map((header) =>
+                                html`<td>
+                                    ${this._getValue(row, header)}
+                                </td>`
                             )
                         }
                     </tr>`
                 }
             })}
         `
+    }
+
+    /**
+     * Return the appropriate formatted value for a given input.
+     * @param {Object} row 
+     * @param {Object} header 
+     */
+    _getValue(row, header) {
+        if (!row[header.key]) {
+            // if there is no value, return the default, if present
+            return header.default ?? ''
+        }
+        if (header.type === 'date') {
+            // if the value is a date, format it
+            const date = moment(row[header.key])
+            return this.dateFormat ?
+                date.format(this.dateFormat) :
+                date.toISOString()
+        }
+        if (header.type === 'html') {
+            // if the value is html, return it as html
+            return unsafeStatic(row[header.key])
+        }
+        if (header.type === 'image') {
+            // if the value is an image, return the appropriate element
+            return html`<img src="${row[header.key]}" />`
+        }
+        return row[header.key]
     }
 
     /**

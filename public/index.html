@@ -36,7 +36,10 @@
         },
         {
           "id": 6,
-          "value": "Ambaraba Cici Coco"
+          "value": "Ambaraba Cici Coco",
+          "date": "2022-11-01T13:57",
+          "html": "<a href=https://www.google.com>goto google</a>",
+          "image": "https://noi.bz.it/themes/custom/noi_techpark/logo_bn.svg"
         }
       ]
     '
@@ -58,9 +61,25 @@
           "name": "The Value",
           "type": "string",
           "default": "-"
+        },
+        {
+          "key": "date",
+          "name": "The Date",
+          "type": "date"
+        },
+        {
+          "key": "html",
+          "name": "The HTML",
+          "type": "html"
+        },
+        {
+          "key": "image",
+          "name": "The Image",
+          "type": "image"
         }
       ]
     '
+    date-format="DD/MM/yyyy - hh:mm:ss"
   />
   <script src="reactive-table.js"></script>
 </body>
