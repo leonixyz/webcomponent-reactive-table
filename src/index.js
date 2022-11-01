@@ -102,9 +102,8 @@ export class ReactiveTable extends LitElement {
             schema: {type: String},
             
             /**
-             * A custom format for dates.
-             * If not present, the output of Date.toLocaleString() is used instead for
-             * all values that are marked as dates.
+             * A custom format for dates. If not present, all dates are
+             * outputted as ISO 8601 strings
              */
             dateFormat: {
                 type: String,

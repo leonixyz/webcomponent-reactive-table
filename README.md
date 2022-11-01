@@ -1,18 +1,21 @@
-# Replace all `ToDo` notes in this file to create the README of your webcomponent!
-
-# ToDo: Project Name
+# Reactive Table
 
 [![REUSE status](https://api.reuse.software/badge/github.com/noi-techpark/webcomp-boilerplate)](https://api.reuse.software/info/github.com/noi-techpark/webcomp-boilerplate)
 [![CI/CD](https://github.com/noi-techpark/webcomp-boilerplate/actions/workflows/main.yml/badge.svg)](https://github.com/noi-techpark/webcomp-boilerplate/actions/workflows/main.yml)
 
-ToDo: Description of the project. What does this web component provide? Which data of the Open Data Hub will be shown? Why is it sooo coool ;-)
+This webcomponent is a generic table that is used to show arbitrary data.
 
-- [Replace all `ToDo` notes in this file to create the README of your webcomponent!](#replace-all-todo-notes-in-this-file-to-create-the-readme-of-your-webcomponent)
-- [ToDo: Project Name](#todo-project-name)
+The data is fed into the component either statically from the HTML where the component is declared, or dynamically by the Javascript of the including page. The component needs to know the schema of the input data in order to be able to create the correct amount of columns, with appropriate header labels, and format the data according to its type.
+
+The component is reactive, in the sense that changing the input data will result in a change in the rendered output, and the same applies for a change in the schema.
+
+- [Reactive Table](#reactive-table)
   - [Usage](#usage)
     - [Attributes](#attributes)
-      - [xxxx](#xxxx)
-      - [yyy](#yyy)
+      - [schema](#schema)
+        - [type](#type)
+      - [data](#data)
+      - [date-format](#date-format)
   - [Getting started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Source code](#source-code)
@@ -35,26 +38,146 @@ ToDo: Description of the project. What does this web component provide? Which da
 
 ## Usage
 
-ToDo: Include the webcompscript file `dist/webcomp-boilerplate.min.js` in your HTML and define the web component like this:
+Include the script file `dist/reactive-table.min.js` in your HTML and define the web component like this:
 
 ```html
-<webcomp-boilerplate xxx="test" yyy="2"></webcomp-boilerplate>
+<reactive-table
+  id="my-table"
+  schema='[
+    {
+      "key": "User-Agent",
+      "name": "My Column Header Label for User-Agent",
+      "type": "string"
+    },
+    {
+      "key": "Content-Type",
+      "name": "My Column Header Label for Content-Type",
+      "type": "string"
+    }
+  ]'  
+/>
+<script>
+  // at any time, hit an API and feed the data into the table
+  const table = document.getElementById('my-table')
+  const data = await fetch('https://httpbin.org/get')
+    .then(response => response.json())
+    .then(json => [json.headers]) // do some data manipulation if needed
+  table._data = data
+  // you can also change the schema at runtime, e.g.
+  // table._schema = [/* some new schema here */]
+</script>
+```
+
+Alternatively, if you just need to render something statically, you can also do it like this:
+
+```html
+  <reactive-table
+    data='
+      [
+        {
+          "id": 1,
+          "name": "pippo",
+          "value": "Ambaraba Cici Coco"
+        },
+        [
+          {
+            "id": 2,
+            "name": "ciccio",
+            "value": "Tre Civette Sul Como"
+          },
+          {
+            "id": 3,
+            "name": "Che Facevano LAmore"
+          },
+          {
+            "id": 4,
+            "value": "Con La Figlia Del Dottore"
+          }
+        ],
+        {
+          "id": 5,
+          "name": "Il Dottore Si Ammalo"
+        },
+        {
+          "id": 6,
+          "value": "Ambaraba Cici Coco",
+          "date": "2022-11-01T13:57",
+          "html": "<a href=https://www.google.com>goto google</a>",
+          "image": "https://noi.bz.it/themes/custom/noi_techpark/logo_bn.svg"
+        }
+      ]
+    '
+    schema='
+      [
+        {
+          "key": "id",
+          "name": "Identifier",
+          "type": "integer"
+        },
+        {
+          "key": "name",
+          "name": "Full Name",
+          "type": "string",
+          "default": "-"
+        },
+        {
+          "key": "value",
+          "name": "The Value",
+          "type": "string",
+          "default": "-"
+        },
+        {
+          "key": "date",
+          "name": "The Date",
+          "type": "date"
+        },
+        {
+          "key": "html",
+          "name": "The HTML",
+          "type": "html"
+        },
+        {
+          "key": "image",
+          "name": "The Image",
+          "type": "image"
+        }
+      ]
+    '
+    date-format="DD/MM/yyyy - hh:mm:ss"
+  />
 ```
 
 ### Attributes
 
-#### xxxx
+#### schema
 
-The description of the parameter xxx.
+The schema of the data to show, expressed as a JSON encoded array of objects (every object describing a table column) with the following properties:
 
-Type: string
-Options: "test", "123"
+| property name | meaning                                                                         |
+|---------------|---------------------------------------------------------------------------------|
+| key           | the object property to use                                                      |
+| name          | this will be the header of that column                                          |
+| type          | if set to date, html, image, the value will be formatted (explained later)      |
+| default       | in case the value is not [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) this will be used as default |
 
-#### yyy
+This attribute has a corresponding Javascript property that can be used to feed the schema into the table, and it has the same name but prepended with a low dash: `_schema`
 
-The description of the parameter yyy.
+##### type
 
-Type: int
+The type indicates what kind of data is going to be present in that column.
+
+* `html` data will be rendered as HTML (**be careful to sanitize your input!**)
+* `image` expects to find an URL of an image; will be translated to `<img src="{THE_URL}" />`
+* `date` expects to find an ISO 8601 string as input (output will be formatted according to the value of the `date-format` attribute)
+
+#### data
+
+The data to visualize, expressed as a JSON encoded array of objects matching (at least partially) the schema declared in the `schema` attribute. Object properties that are not matched by the schema are ignored.
+
+This attribute has a corresponding Javascript property that can be used to feed the schema into the table, and it has the same name but prepended with a low dash: `_data`
+
+#### date-format
+Whenever an object having a schema of `"type": "date"`" is handled, this is the formatting string that will be used to format the output. Refer to [this syntax](https://momentjs.com/docs/#/displaying/format/).
 
 ## Getting started
 
@@ -65,7 +188,6 @@ on your local machine for development and testing purposes.
 
 To build the project, the following prerequisites must be met:
 
-- ToDo: Check the prerequisites
 - Node 12 / NPM 6
 
 For a ready to use Docker environment with all prerequisites already installed and prepared, you can check out the [Docker environment](#docker-environment) section.
@@ -75,13 +197,13 @@ For a ready to use Docker environment with all prerequisites already installed a
 Get a copy of the repository:
 
 ```bash
-ToDo: git clone https://github.com/noi-techpark/project-name.git
+git clone https://github.com/noi-techpark/webcomp-reactive-table.git
 ```
 
 Change directory:
 
 ```bash
-ToDo: cd project-name/
+cd webcomp-reactive-table
 ```
 
 ### Dependencies
@@ -89,7 +211,7 @@ ToDo: cd project-name/
 Download all dependencies:
 
 ```bash
-npm install
+npm ci
 ```
 
 ### Build
@@ -100,7 +222,7 @@ Build and start the project:
 npm run start
 ```
 
-The application will be served and can be accessed at [http://localhost:8080](http://localhost:8080).
+The application will be served and can be accessed at [http://localhost:8998](http://localhost:8998).
 
 ## Tests and linting
 
