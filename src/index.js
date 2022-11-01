@@ -1,4 +1,5 @@
 import moment from 'moment'
+import onChange from 'on-change'
 import {LitElement, css} from 'lit'
 import {html, unsafeStatic} from 'lit/static-html.js'
 
@@ -94,12 +95,14 @@ export class ReactiveTable extends LitElement {
             * @type {string}
             */
             data: {type: String},
+            _data: {type: Object},
             
             /**
             * The schema of the data.
             * @type {string}
             */
             schema: {type: String},
+            _schema: {type: Object},
             
             /**
              * A custom format for dates. If not present, all dates are
@@ -119,21 +122,33 @@ export class ReactiveTable extends LitElement {
         super();
         this.data = "[]";
         this.schema = "[]";
-        this._data = [];
-        this._schema = [];
+        this._data = onChange(
+            [],
+            (path, value, previousValue, applyData) => this.requestUpdate()
+        )
+        this._schema = onChange(
+            [],
+            (path, value, previousValue, applyData) => this.requestUpdate()
+        );
         this.hasHiddenRows = false
     }
-    
+
     /**
      * Implement the Lit reactive lifecycle event hook.
      * @param {object} changed 
      */
     willUpdate(changed) {
         if (changed.has('data') && this.data) {
-            this._data = JSON.parse(this.data);
+            this._data = onChange(
+                JSON.parse(this.data), 
+                (path, value, previousValue, applyData) => this.requestUpdate()
+            );
         }
         if (changed.has('schema') && this.schema) {
-            this._schema = JSON.parse(this.schema);
+            this._schema = onChange(
+                JSON.parse(this.schema),
+                (path, value, previousValue, applyData) => this.requestUpdate()
+            );
         }
     }
     
