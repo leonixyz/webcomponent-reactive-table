@@ -12,69 +12,61 @@
       [
         {
           "id": 1,
-          "name": "pippo",
-          "value": "Ambaraba Cici Coco"
+          "name": "Hello",
+          "when": "2022-11-03T21:10:57.299Z",
+          "markup": "<button onclick=alert(document.title)>click</button>",
+          "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Noto_Emoji_v2.034_1f60e.svg/36px-Noto_Emoji_v2.034_1f60e.svg.png"
+        },
+        {
+          "id": 2,
+          "name": "World",
+          "when": "1985-05-24T08:30:00Z",
+          "markup": "<a href=https://noi.bz.it>NOI</a>",
+          "logo": "https://noi.bz.it/themes/custom/noi_techpark/logo_bn.svg"
         },
         [
           {
-            "id": 2,
-            "name": "ciccio",
-            "value": "Tre Civette Sul Como"
+            "id": 42,
+            "name": "Expand me",
+            "markup": "<progress value=35 max=100></progress>",
+            "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Noto_Emoji_v2.034_1f60d.svg/36px-Noto_Emoji_v2.034_1f60d.svg.png"
           },
           {
-            "id": 3,
-            "name": "Che Facevano LAmore"
-          },
-          {
-            "id": 4,
-            "value": "Con La Figlia Del Dottore"
+            "id": 9,
+            "name": "Yet another row",
+            "when": "2022-06-22T10:47:00.000Z",
+            "markup": "<ol><li>one</li><li>two</li><li>three</li></ol>",
+            "logo": "https://media.tenor.com/scJRYj_rR8YAAAAM/john-travolta-lost.gif"
           }
-        ],
-        {
-          "id": 5,
-          "name": "Il Dottore Si Ammalo"
-        },
-        {
-          "id": 6,
-          "value": "Ambaraba Cici Coco",
-          "date": "2022-11-01T13:57",
-          "html": "<a href=https://www.google.com>goto google</a>",
-          "image": "https://noi.bz.it/themes/custom/noi_techpark/logo_bn.svg"
-        }
+        ]
       ]
     '
     schema='
       [
         {
           "key": "id",
-          "name": "Identifier",
+          "name": "A number",
           "type": "integer"
         },
         {
           "key": "name",
-          "name": "Full Name",
-          "type": "string",
+          "name": "A string",
+          "type": "string"
+        },
+        {
+          "key": "when",
+          "name": "A date",
+          "type": "date",
           "default": "-"
         },
         {
-          "key": "value",
-          "name": "The Value",
-          "type": "string",
-          "default": "-"
-        },
-        {
-          "key": "date",
-          "name": "The Date",
-          "type": "date"
-        },
-        {
-          "key": "html",
-          "name": "The HTML",
+          "key": "markup",
+          "name": "Some HTML",
           "type": "html"
         },
         {
-          "key": "image",
-          "name": "The Image",
+          "key": "logo",
+          "name": "An Image",
           "type": "image"
         }
       ]

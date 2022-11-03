@@ -45,13 +45,13 @@ Include the script file `dist/reactive-table.min.js` in your HTML and define the
   id="my-table"
   schema='[
     {
-      "key": "User-Agent",
-      "name": "My Column Header Label for User-Agent",
+      "key": "Accept-Encoding",
+      "name": "My Column Header Label for Accept-Encoding",
       "type": "string"
     },
     {
-      "key": "Content-Type",
-      "name": "My Column Header Label for Content-Type",
+      "key": "Accept-Language",
+      "name": "My Column Header Label for Accept-Language",
       "type": "string"
     }
   ]'  
@@ -59,10 +59,10 @@ Include the script file `dist/reactive-table.min.js` in your HTML and define the
 <script>
   // at any time, hit an API and feed the data into the table
   const table = document.getElementById('my-table')
-  const data = await fetch('https://httpbin.org/get')
+  fetch('https://httpbin.org/get')
     .then(response => response.json())
     .then(json => [json.headers]) // do some data manipulation if needed
-  table._data = data
+    .then(data => table._data = data)
   // you can also change the schema at runtime, e.g.
   // table._schema = [/* some new schema here */]
 </script>

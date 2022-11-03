@@ -3,6 +3,7 @@
   "description": "A simple HTML table that gets fed with custom data",
   "descriptionAbstract": "The purpose of this webcomponent is to have an easy way to dynamically create a table by feeding data into it from the external DOM.",
   "license": "AGPL-3.0-or-later",
+  "repositoryUrl": "https://github.com/leonixyz/webcomponent-reactive-table.git",
   "copyrightHolders": [
     {
       "name": "NOI",
@@ -38,7 +39,7 @@
         "label": "a JSON encoded string representing an array of objects that will be translated to table rows",
         "required": true,
         "options": {
-          "default": "[]"
+          "default": "[{\"id\":1,\"name\":\"Hello\",\"when\":\"2022-11-03T21:10:57.299Z\",\"markup\":\"<button onclick=alert(document.title)>click</button>\",\"logo\":\"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Noto_Emoji_v2.034_1f60e.svg/36px-Noto_Emoji_v2.034_1f60e.svg.png\"},{\"id\":2,\"name\":\"World\",\"when\":\"1985-05-24T08:30:00Z\",\"markup\":\"<a href=https://noi.bz.it>NOI</a>\",\"logo\":\"https://noi.bz.it/themes/custom/noi_techpark/logo_bn.svg\"},[{\"id\":42,\"name\":\"Expand me\",\"markup\":\"<progress value=35 max=100></progress>\",\"logo\":\"https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Noto_Emoji_v2.034_1f60d.svg/36px-Noto_Emoji_v2.034_1f60d.svg.png\"},{\"id\":9,\"name\":\"Yet another row\",\"when\":\"2022-06-22T10:47:00.000Z\",\"markup\":\"<ol><li>one</li><li>two</li><li>three</li></ol>\",\"logo\":\"https://media.tenor.com/scJRYj_rR8YAAAAM/john-travolta-lost.gif\"}]]"
         }
       },
       {
@@ -47,7 +48,7 @@
         "label": "a JSON encoded string representing an array of objects that define the schema of the input data",
         "required": true,
         "options": {
-          "default": "[]"
+          "default": "[{\"key\":\"id\",\"name\":\"A number\",\"type\":\"integer\"},{\"key\":\"name\",\"name\":\"A string\",\"type\":\"string\"},{\"key\":\"when\",\"name\":\"A date\",\"type\":\"date\",\"default\":\"-\"},{\"key\":\"markup\",\"name\":\"Some HTML\",\"type\":\"html\"},{\"key\":\"logo\",\"name\":\"An Image\",\"type\":\"image\"}]"
         }
       },
       {
@@ -56,7 +57,7 @@
         "label": "the output format for date objects using Moment.js tokens: https://momentjs.com/docs/#/displaying/format/",
         "required": true,
         "options": {
-          "default": ""
+          "default": "DD/MM/YYYY - HH:mm:ss"
         }
       }
     ]
